@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health & Well-Being - Presentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'body': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        mint: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background: #f8faf9;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .slides-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 70px 1.5rem 60px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(60px);
+            transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s 0.5s;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+            transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s 0s;
+            z-index: 10;
+        }
+
+        .slide.exit-left {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-60px);
+            transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s 0.5s;
+        }
+
+        .highlight-number {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+
+        .progress-fill {
+            transition: width 0.4s ease;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .slide-content {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide.active .anim-item {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        .slide.active .anim-item[data-delay="1"] { animation-delay: 0.05s; opacity: 0; }
+        .slide.active .anim-item[data-delay="2"] { animation-delay: 0.12s; opacity: 0; }
+        .slide.active .anim-item[data-delay="3"] { animation-delay: 0.2s; opacity: 0; }
+        .slide.active .anim-item[data-delay="4"] { animation-delay: 0.28s; opacity: 0; }
+        .slide.active .anim-item[data-delay="5"] { animation-delay: 0.36s; opacity: 0; }
+        .slide.active .anim-item[data-delay="6"] { animation-delay: 0.44s; opacity: 0; }
+
+        .glass-nav {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .glass-bottom {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .thumb-btn {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .thumb-btn:hover { transform: scale(1.15); }
+
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
+
+        @media (max-width: 768px) {
+            .slide { padding: 68px 1rem 56px; }
+        }
+    </style>
+</head>
+<body class="font-body">
+
+    <!-- Top Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-3 md:px-6 py-2.5 glass-nav">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-mint-400 to-mint-600 flex items-center justify-center">
+                <i data-lucide="heart-pulse" class="w-4 h-4 text-white"></i>
+            </div>
+            <span class="font-semibold text-gray-700 text-sm hidden sm:block">Health & Well-Being</span>
+        </div>
+        <div class="flex-1 mx-3 md:mx-6 max-w-sm hidden sm:block">
+            <div class="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                <div id="progressBar" class="progress-fill h-full bg-gradient-to-r from-mint-400 to-mint-600 rounded-full" style="width:9.09%"></div>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="text-xs font-medium text-gray-500 mr-1"><span id="currentSlide">1</span>/<span id="totalSlides">11</span></span>
+            <button onclick="prevSlide()" class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors" aria-label="Previous slide">
+                <i data-lucide="chevron-left" class="w-4 h-4 text-gray-600"></i>
+            </button>
+            <button onclick="nextSlide()" class="w-8 h-8 rounded-lg bg-mint-500 hover:bg-mint-600 flex items-center justify-center transition-colors" aria-label="Next slide">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-white"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Bottom Thumbnails -->
+    <div class="fixed bottom-0 left-0 right-0 z-40 px-2 py-2 glass-bottom">
+        <div class="flex gap-1.5 overflow-x-auto justify-center items-center pb-0.5" id="thumbnailContainer"></div>
+    </div>
+
+    <!-- Slides -->
+    <div class="slides-wrapper" id="slidesContainer">
+
+        <!-- SLIDE 1: Cover -->
+        <div class="slide active" data-slide="1">
+            <div class="slide-content text-center">
+                <div class="anim-item" data-delay="1">
+                    <span class="tag bg-mint-100 text-mint-700">Presentation</span>
+                </div>
+                <h1 class="anim-item font-display text-5xl md:text-7xl lg:text-8xl text-gray-900 leading-tight mt-4 mb-6" data-delay="2">
+                    Health &<br>Well-Being
+                </h1>
+                <p class="anim-item text-lg md:text-xl text-gray-500 max-w-lg mx-auto mb-8" data-delay="3">
+                    Understanding how health connects to globalization, climate change, and our history.
+                </p>
+                <div class="anim-item flex flex-wrap justify-center gap-3 mb-10" data-delay="4">
+                    <span class="tag bg-blue-50 text-blue-600">Globalization</span>
+                    <span class="tag bg-orange-50 text-orange-600">Global Warming</span>
+                    <span class="tag bg-purple-50 text-purple-600">Holocaust</span>
+                </div>
+                <div class="anim-item flex flex-wrap justify-center gap-6 text-sm text-gray-400" data-delay="5">
+                    <span>Student 1</span><span>•</span><span>Student 2</span><span>•</span><span>Student 3</span><span>•</span><span>Student 4</span>
+                </div>
+                <div class="anim-item mt-10" data-delay="6">
+                    <button onclick="nextSlide()" class="inline-flex items-center gap-2 px-6 py-3 bg-mint-500 hover:bg-mint-600 text-white rounded-full font-medium transition-colors">
+                        Start Presentation <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: Introduction -->
+        <div class="slide" data-slide="2">
+            <div class="slide-content">
+                <div class="anim-item" data-delay="1"><span class="tag bg-mint-100 text-mint-700">Introduction</span></div>
+                <h2 class="anim-item font-display text-4xl md:text-5xl text-gray-900 mt-3 mb-8" data-delay="2">What is Health & Well-Being?</h2>
+                <div class="anim-item grid md:grid-cols-2 gap-6" data-delay="3">
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                        <div class="w-10 h-10 rounded-xl bg-mint-50 flex items-center justify-center mb-4"><i data-lucide="heart" class="w-5 h-5 text-mint-600"></i></div>
+                        <h3 class="font-semibold text-gray-900 mb-2">Definition</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">Health is a state of complete physical, mental, and social well-being — not just the absence of disease. Well-being includes emotional, psychological, and social wellness.</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-4"><i data-lucide="globe" class="w-5 h-5 text-blue-600"></i></div>
+                        <h3 class="font-semibold text-gray-900 mb-2">Why It Matters Today</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">In the 21st century, health challenges are global. Pandemics, climate change, and social inequalities affect everyone. Understanding well-being helps us build a better future.</p>
+                    </div>
+                </div>
+                <div class="anim-item mt-6 bg-gradient-to-r from-mint-50 to-blue-50 rounded-2xl p-6 border border-mint-100" data-delay="4">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i data-lucide="lightbulb" class="w-4 h-4 text-mint-600"></i>
+                        <span class="font-semibold text-gray-900 text-sm">Key Insight</span>
+                    </div>
+                    <p class="text-gray-600 text-sm">The WHO constitution states: <em>"Health is a fundamental human right."</em> Yet, billions of people still lack access to basic healthcare services.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: Facts -->
+        <div class="slide" data-slide="3">
+            <div class="slide-content">
+                <div class="anim-item" data-delay="1"><span class="tag bg-blue-100 text-blue-700">Facts</span></div>
+                <h2 class="anim-item font-display text-4xl md:text-5xl text-gray-900 mt-3 mb-8" data-delay="2">Surprising Facts</h2>
+                <div class="anim-item grid grid-cols-2 md:grid-cols-4 gap-4" data-delay="3">
+                    <div class="card-hover bg-white rounded-2xl p-5 shadow-sm border border-gray-100 text-center">
+                        <div class="highlight-number text-4xl md:text-5xl mb-2">1B+</div>
+                        <p class="text-gray-500 text-xs">People live with mental health conditions worldwide</p>
+                    </div>
+                    <div class="card-hover bg-white rounded-2xl p-5 shadow-sm border border-gray-100 text-center">
+                        <div class="highlight-number text-4xl md:text-5xl mb-2">13M</div>
+                        <p class="text-gray-500 text-xs">Deaths per year from preventable environmental causes</p>
+                    </div>
+                    <div class="card-hover bg-white rounded-2xl p-5 shadow-sm border border-gray-100 text-center">
+                        <div class="highlight-number text-4xl md:text-5xl mb-2">50%</div>
+                        <p class="text-gray-500 text-xs">Of the world lacks access to essential health services</p>
+                    </div>
+                    <div class="card-hover bg-white rounded-2xl p-5 shadow-sm border border-gray-100 text-center">
+                        <div class="highlight-number text-4xl md:text-5xl mb-2">70%</div>
+                        <p class="text-gray-500 text-xs">Of diseases are linked to environmental factors</p>
+                    </div>
+                </div>
+                <div class="anim-item grid md:grid-cols-3 gap-4 mt-6" data-delay="4">
+                    <div class="flex items-start gap-3 bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                        <i data-lucide="activity" class="w-5 h-5 text-mint-500 mt-0.5 shrink-0"></i>
+                        <p class="text-gray-600 text-sm">Regular exercise reduces the risk of chronic diseases by <strong>30-50%</strong></p>
+                    </div>
+                    <div class="flex items-start gap-3 bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                        <i data-lucide="brain" class="w-5 h-5 text-purple-500 mt-0.5 shrink-0"></i>
+                        <p class="text-gray-600 text-sm">Depression is a <strong>leading cause</strong> of disability worldwide</p>
+                    </div>
+                    <div class="flex items-start gap-3 bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                        <i data-lucide="droplets" class="w-5 h-5 text-blue-500 mt-0.5 shrink-0"></i>
+                        <p class="text-gray-600 text-sm"><strong>2 billion</strong> people lack safe drinking water at home</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: Benefits -->
+        <div class="slide" data-slide="4">
+            <div class="slide-content">
+                <div class="anim-item" data-delay="1"><span class="tag bg-green-100 text-green-700">Benefits</span></div>
+                <h2 class="anim-item font-display text-4xl md:text-5xl text-gray-900 mt-3 mb-8" data-delay="2">Benefits of Good Health</h2>
+                <div class="anim-item grid md:grid-cols-2 gap-4" data-delay="3">
+                    <div class="card-hover flex items-start gap-4 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                        <div class="w-12 h-12 rounded-xl bg-mint-50 flex items-center justify-center shrink-0"><i data-lucide="zap" class="w-6 h-6 text-mint-600"></i></div>
+                        <div><h3 class="font-semibold text-gray-900 mb-1">More Energy & Productivity</h3><p class="text-gray-500 text-sm">Healthy people work better, learn faster, and contribute more to society and the economy.</p></div>
+                    </div>
+                    <div class="card-hover flex items-start gap-4 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0"><i data-lucide="smile" class="w-6 h-6 text-blue-600"></i></div>
+                        <div><h3 class="font-semibold text-gray-900 mb-1">Better Mental Health</h3><p class="text-gray-500 text-sm">Physical activity releases endorphins, reducing anxiety and improving mood and self-esteem.</p></div>
+                    </div>
+                    <div class="card-hover flex items-start gap-4 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                        <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center shrink-0"><i data-lucide="users" class="w-6 h-6 text-orange-600"></i></div>
+                        <div><h3 class="font-semibold text-gray-900 mb-1">Stronger Communities</h3><p class="text-gray-500 text-sm">Healthy individuals build stronger families and communities, reducing social inequality.</p></div>
+                    </div>
+                    <div class="card-hover flex items-start gap-4 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                        <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center shrink-0"><i data-lucide="shield-check" class="w-6 h-6 text-purple-600"></i></div>
+                        <div><h3 class="font-semibold text-gray-900 mb-1">Disease Prevention</h3><p class="text-gray-500 text-sm">Good habits prevent 80% of heart disease, stroke, and type 2 diabetes cases.</p></div>
+                    </div>
+                </div>
+                <div class="anim-item mt-6 bg-mint-50 rounded-2xl p-5 border border-mint-100 flex items-center gap-4" data-delay="4">
+                    <div class="highlight-number text-5xl">$4</div>
+                    <p class="text-gray-600 text-sm">Every <strong>$1 invested</strong> in health promotion returns <strong>$4 in economic benefits</strong> — a smart investment for any country.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: Challenges -->
+        <div class="slide" data-slide="5">
+            <div class="slide-content">
+                <div class="anim-item" data-delay="1"><span class="tag bg-red-100 text-red-700">Challenges</span></div>
+                <h2 class="anim-item font-display text-4xl md:text-5xl text-gray-900 mt-3 mb-8" data-delay="2">Major Challenges</h2>
+                <div class="anim-item space-y-4" data-delay="3">
+                    <div class="card-hover bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center shrink-0 text-red-500 font-bold text-lg">1</div>
+                        <div class="flex-1"><h3 class="font-semibold text-gray-900">Inequality in Healthcare Access</h3><p class="text-gray-500 text-sm">Developing countries have <strong>1 doctor per 10,000 people</strong> in some regions.</p></div>
+                        <div class="highlight-number text-3xl hidden md:block">10K</div>
+                    </div>
+                    <div class="card-hover bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center shrink-0 text-orange-500 font-bold text-lg">2</div>
+                        <div class="flex-1"><h3 class="font-semibold text-gray-900">Climate & Environmental Threats</h3><p class="text-gray-500 text-sm">Air pollution kills <strong>7 million people</strong> every year according to the WHO.</p></div>
+                        <div class="highlight-number text-3xl hidden md:block">7M</div>
+                    </div>
+                    <div class="card-hover bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center shrink-0 text-purple-500 font-bold text-lg">3</div>
+                        <div class="flex-1"><h3 class="font-semibold text-gray-900">Mental Health Crisis</h3><p class="text-gray-500 text-sm">Stigma, lack of resources, and modern pressures create a growing silent epidemic.</p></div>
+                        <i data-lucide="brain" class="w-8 h-8 text-purple-200 hidden md:block"></i>
+                    </div>
+                    <div class="card-hover bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-yellow-50 flex items-center justify-center shrink-0 text-yellow-600 font-bold text-lg">4</div>
+                        <div class="flex-1"><h3 class="font-semibold text-gray-900">Sedentary Lifestyles</h3><p class="text-gray-500 text-sm">Technology and urban living reduce physical activity, increasing obesity and chronic diseases.</p></div>
+                        <i data-lucide="monitor" class="w-8 h-8 text-yellow-200 hidden md:block"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: Globalization -->
+        <div class="slide" data-slide="6">
+            <div class="slide-content">
+                <div class="anim-item" data-delay="1"><span class="tag bg-blue-100 text-blue-700">Globalization</span></div>
+                <h2 class="anim-item font-display text-4xl md:text-5xl text-gray-900 mt-3 mb-8" data-delay="2">Health & Globalization</h2>
+                <div class="anim-item grid md:grid-cols-2 gap-6 mb-6" data-delay="3">
+                    <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 border border-blue-100">
+                        <div class="flex items-center gap-2 mb-4"><i data-lucide="plus-circle" class="w-5 h-5 text-blue-600"></i><h3 class="font-semibold text-gray-900">Positive Impacts</h3></div>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="check" class="w-4 h-4 text-blue-500 mt-0.5 shrink-0"></i>Faster sharing of medical research and technology</li>
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="check" class="w-4 h-4 text-blue-500 mt-0.5 shrink-0"></i>Global coordination during pandemics (COVID-19)</li>
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="check" class="w-4 h-4 text-blue-500 mt-0.5 shrink-0"></i>Access to international healthcare and telemedicine</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-br from-red-50 to-white rounded-2xl p-6 border border-red-100">
+                        <div class="flex items-center gap-2 mb-4"><i data-lucide="minus-circle" class="w-5 h-5 text-red-600"></i><h3 class="font-semibold text-gray-900">Negative Impacts</h3></div>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="x" class="w-4 h-4 text-red-400 mt-0.5 shrink-0"></i>Diseases spread faster across borders</li>
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="x" class="w-4 h-4 text-red-400 mt-0.5 shrink-0"></i>Junk food and unhealthy habits go global</li>
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="x" class="w-4 h-4 text-red-400 mt-0.5 shrink-0"></i>Health workers migrate from poor to rich countries</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="anim-item bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center gap-4" data-delay="4">
+                    <div class="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center shrink-0"><i data-lucide="plane" class="w-7 h-7 text-blue-500"></i></div>
+                    <p class="text-gray-700 text-sm font-medium">COVID-19 showed: a virus in one country can become a global crisis in <strong>weeks</strong>. Health is no longer local — it's planetary.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: Global Warming -->
+        <div class="slide" data-slide="7">
+            <div class="slide-content">
+                <div class="anim-item" data-delay="1"><span class="tag bg-orange-100 text-orange-700">Global Warming</span></div>
+                <h2 class="anim-item font-display text-4xl md:text-5xl text-gray-900 mt-3 mb-8" data-delay="2">Health & Climate Change</h2>
+                <div class="anim-item grid md:grid-cols-3 gap-4 mb-6" data-delay="3">
+                    <div class="card-hover bg-gradient-to-br from-orange-50 to-white rounded-2xl p-5 border border-orange-100 text-center">
+                        <i data-lucide="thermometer" class="w-8 h-8 text-orange-500 mx-auto mb-3"></i>
+                        <h3 class="font-semibold text-gray-900 text-sm mb-1">Heat Stress</h3>
+                        <p class="text-gray-500 text-xs">Rising temperatures cause heat strokes and respiratory problems</p>
+                    </div>
+                    <div class="card-hover bg-gradient-to-br from-blue-50 to-white rounded-2xl p-5 border border-blue-100 text-center">
+                        <i data-lucide="cloud-rain" class="w-8 h-8 text-blue-500 mx-auto mb-3"></i>
+                        <h3 class="font-semibold text-gray-900 text-sm mb-1">Water Contamination</h3>
+                        <p class="text-gray-500 text-xs">Floods spread waterborne diseases like cholera and dysentery</p>
+                    </div>
+                    <div class="card-hover bg-gradient-to-br from-green-50 to-white rounded-2xl p-5 border border-green-100 text-center">
+                        <i data-lucide="leaf" class="w-8 h-8 text-green-500 mx-auto mb-3"></i>
+                        <h3 class="font-semibold text-gray-900 text-sm mb-1">Food Security</h3>
+                        <p class="text-gray-500 text-xs">Droughts and extreme weather threaten food production globally</p>
+                    </div>
+                </div>
+                <div class="anim-item bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-6 text-white" data-delay="4">
+                    <div class="flex flex-col md:flex-row items-center gap-6">
+                        <div class="text-center md:text-left">
+                            <div class="font-display text-5xl font-bold">250,000</div>
+                            <p class="text-orange-100 text-sm mt-1">Additional deaths per year from climate change (WHO estimate)</p>
+                        </div>
+                        <div class="flex-1">
+                            <ul class="space-y-2 text-sm">
+                                <li class="flex items-center gap-2"><i data-lucide="alert-triangle" class="w-4 h-4 text-orange-200 shrink-0"></i>Malaria zones expanding with warmer temperatures</li>
+                                <li class="flex items-center gap-2"><i data-lucide="alert-triangle" class="w-4 h-4 text-orange-200 shrink-0"></i>Air pollution worsening with forest fires</li>
+                                <li class="flex items-center gap-2"><i data-lucide="alert-triangle" class="w-4 h-4 text-orange-200 shrink-0"></i>Climate refugees losing access to healthcare</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: Holocaust -->
+        <div class="slide" data-slide="8">
+            <div class="slide-content">
+                <div class="anim-item" data-delay="1"><span class="tag bg-purple-100 text-purple-700">Historical Connection</span></div>
+                <h2 class="anim-item font-display text-4xl md:text-5xl text-gray-900 mt-3 mb-8" data-delay="2">Health & The Holocaust</h2>
+                <div class="anim-item bg-gradient-to-br from-purple-50 to-gray-50 rounded-2xl p-6 border border-purple-100 mb-6" data-delay="3">
+                    <p class="text-gray-600 text-sm leading-relaxed">The Holocaust (1939–1945) represents one of the darkest chapters in history, where <strong>systematic destruction of health and well-being</strong> was used as a weapon of oppression and genocide.</p>
+                </div>
+                <div class="anim-item grid md:grid-cols-3 gap-4 mb-6" data-delay="4">
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mb-3"><i data-lucide="shield-off" class="w-5 h-5 text-purple-600"></i></div>
+                        <h3 class="font-semibold text-gray-900 text-sm mb-2">Loss of Basic Rights</h3>
+                        <p class="text-gray-500 text-xs">Millions were denied food, shelter, medicine, and all conditions necessary for health.</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                        <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mb-3"><i data-lucide="skull" class="w-5 h-5 text-red-600"></i></div>
+                        <h3 class="font-semibold text-gray-900 text-sm mb-2">Medical Ethics Violations</h3>
+                        <p class="text-gray-500 text-xs">Nazi doctors performed cruel experiments on prisoners, leading to modern medical ethics codes.</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mb-3"><i data-lucide="scale" class="w-5 h-5 text-blue-600"></i></div>
+                        <h3 class="font-semibold text-gray-900 text-sm mb-2">Legacy & Lessons</h3>
+                        <p class="text-gray-500 text-xs">The Nuremberg Code was created to ensure <strong>informed consent</strong> in medical practice — a direct result.</p>
+                    </div>
+                </div>
+                <div class="anim-item bg-white rounded-2xl p-5 shadow-sm border-l-4 border-purple-400" data-delay="5">
+                    <p class="text-gray-600 text-sm italic"><strong>Lesson:</strong> Health and well-being must be protected as human rights. History shows that when they are violated, the consequences are catastrophic for all of humanity.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: Global Impact -->
+        <div class="slide" data-slide="9">
+            <div class="slide-content">
+                <div class="anim-item" data-delay="1"><span class="tag bg-indigo-100 text-indigo-700">Global Impact</span></div>
+                <h2 class="anim-item font-display text-4xl md:text-5xl text-gray-900 mt-3 mb-8" data-delay="2">Impact on Society</h2>
+                <div class="anim-item grid md:grid-cols-2 gap-6 mb-6" data-delay="3">
+                    <div class="bg-gradient-to-br from-indigo-50 to-white rounded-2xl p-6 border border-indigo-100">
+                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2"><i data-lucide="trending-up" class="w-5 h-5 text-indigo-500"></i>Social & Economic Impact</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="dot" class="w-4 h-4 text-indigo-400 shrink-0 mt-0.5"></i>Poor health costs the global economy <strong>$12 trillion</strong> per year</li>
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="dot" class="w-4 h-4 text-indigo-400 shrink-0 mt-0.5"></i>Healthy populations drive innovation and economic growth</li>
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="dot" class="w-4 h-4 text-indigo-400 shrink-0 mt-0.5"></i>Healthcare inequity deepens global inequality</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-br from-mint-50 to-white rounded-2xl p-6 border border-mint-100">
+                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2"><i data-lucide="heart-handshake" class="w-5 h-5 text-mint-500"></i>Health as a Human Right</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="dot" class="w-4 h-4 text-mint-400 shrink-0 mt-0.5"></i>UN Sustainable Development Goal 3: Good Health for All</li>
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="dot" class="w-4 h-4 text-mint-400 shrink-0 mt-0.5"></i>Global health security depends on the weakest link</li>
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="dot" class="w-4 h-4 text-mint-400 shrink-0 mt-0.5"></i>Rich countries must support healthcare access globally</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="anim-item grid grid-cols-3 gap-4" data-delay="4">
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 text-center">
+                        <div class="highlight-number text-3xl mb-1">$12T</div>
+                        <p class="text-gray-500 text-xs">Economic cost of poor health per year</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 text-center">
+                        <div class="highlight-number text-3xl mb-1">SDG 3</div>
+                        <p class="text-gray-500 text-xs">UN Goal: Good Health & Well-Being</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 text-center">
+                        <div class="highlight-number text-3xl mb-1">164</div>
+                        <p class="text-gray-500 text-xs">Countries committed to better health</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: Future Perspectives -->
+        <div class="slide" data-slide="10">
+            <div class="slide-content">
+                <div class="anim-item" data-delay="1"><span class="tag bg-emerald-100 text-emerald-700">Future Perspectives</span></div>
+                <h2 class="anim-item font-display text-4xl md:text-5xl text-gray-900 mt-3 mb-2" data-delay="2">The World by 2100</h2>
+                <p class="anim-item text-gray-500 mb-8" data-delay="2">How will health & well-being change the world by 2100?</p>
+                <div class="anim-item grid md:grid-cols-2 gap-6 mb-6" data-delay="3">
+                    <div class="bg-gradient-to-br from-mint-50 to-white rounded-2xl p-6 border border-mint-200">
+                        <div class="flex items-center gap-2 mb-4"><i data-lucide="rocket" class="w-5 h-5 text-mint-600"></i><h3 class="font-semibold text-gray-900">Optimistic Future</h3></div>
+                        <ul class="space-y-2">
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="check-circle" class="w-4 h-4 text-mint-500 shrink-0 mt-0.5"></i>AI and robotics revolutionize early disease detection</li>
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="check-circle" class="w-4 h-4 text-mint-500 shrink-0 mt-0.5"></i>Universal healthcare becomes a global reality</li>
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="check-circle" class="w-4 h-4 text-mint-500 shrink-0 mt-0.5"></i>Gene therapy eliminates many hereditary diseases</li>
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="check-circle" class="w-4 h-4 text-mint-500 shrink-0 mt-0.5"></i>Mental health receives equal priority worldwide</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-br from-red-50 to-white rounded-2xl p-6 border border-red-200">
+                        <div class="flex items-center gap-2 mb-4"><i data-lucide="alert-octagon" class="w-5 h-5 text-red-600"></i><h3 class="font-semibold text-gray-900">If We Do Nothing</h3></div>
+                        <ul class="space-y-2">
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="x-circle" class="w-4 h-4 text-red-400 shrink-0 mt-0.5"></i>Climate change displaces billions, destroying health systems</li>
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="x-circle" class="w-4 h-4 text-red-400 shrink-0 mt-0.5"></i>Antibiotic resistance makes infections untreatable</li>
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="x-circle" class="w-4 h-4 text-red-400 shrink-0 mt-0.5"></i>Inequality widens the health gap between rich and poor</li>
+                            <li class="flex items-start gap-2 text-sm text-gray-600"><i data-lucide="x-circle" class="w-4 h-4 text-red-400 shrink-0 mt-0.5"></i>Mental health crisis affects over 2 billion people</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="anim-item bg-gradient-to-r from-mint-500 to-emerald-600 rounded-2xl p-6 text-white text-center" data-delay="4">
+                    <p class="text-lg font-medium mb-1">The future depends on the choices we make <strong>today</strong>.</p>
+                    <p class="text-mint-100 text-sm">Investing in health is investing in humanity's survival.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 11: Thank You -->
+        <div class="slide" data-slide="11">
+            <div class="slide-content text-center">
+                <div class="anim-item" data-delay="1">
+                    <div class="w-20 h-20 rounded-full bg-gradient-to-br from-mint-400 to-emerald-600 flex items-center justify-center mx-auto"><i data-lucide="heart" class="w-10 h-10 text-white"></i></div>
+                </div>
+                <h2 class="anim-item font-display text-5xl md:text-7xl text-gray-900 mt-6 mb-4" data-delay="2">Thanks for the attention!</h2>
+                <p class="anim-item text-xl text-gray-400 mb-8" data-delay="3">Health & Well-Being — A topic that connects us all.</p>
+                <div class="anim-item flex flex-wrap justify-center gap-3 mb-10" data-delay="4">
+                    <span class="tag bg-mint-100 text-mint-700">Health</span>
+                    <span class="tag bg-blue-100 text-blue-700">Globalization</span>
+                    <span class="tag bg-orange-100 text-orange-700">Climate</span>
+                    <span class="tag bg-purple-100 text-purple-700">History</span>
+                    <span class="tag bg-emerald-100 text-emerald-700">Future</span>
+                </div>
+                <div class="anim-item" data-delay="5">
+                    <button onclick="goToSlide(1)" class="px-6 py-3 border-2 border-gray-200 rounded-full text-gray-500 hover:bg-gray-50 font-medium transition-colors inline-flex items-center gap-2">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Restart
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 11;
+        const thumbnailNames = [
+            'Cover', 'Intro', 'Facts', 'Benefits', 'Challenges',
+            'Globalization', 'Climate', 'Holocaust', 'Impact', 'Future', 'Thanks'
+        ];
+
+        // Build thumbnails
+        const thumbContainer = document.getElementById('thumbnailContainer');
+        for (let i = 1; i <= totalSlides; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'thumb-btn w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center text-xs font-bold';
+            btn.dataset.slide = i;
+            btn.textContent = i;
+            btn.title = thumbnailNames[i - 1];
+            btn.onclick = () => goToSlide(i);
+            thumbContainer.appendChild(btn);
+        }
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        function goToSlide(n) {
+            if (n < 1 || n > totalSlides || n === currentSlide) return;
+
+            const currentEl = document.querySelector('.slide[data-slide="' + currentSlide + '"]');
+            const nextEl = document.querySelector('.slide[data-slide="' + n + '"]');
+            const goingForward = n > currentSlide;
+
+            // Reset animation items on next slide so they animate in
+            nextEl.querySelectorAll('.anim-item').forEach(function(el) {
+                el.style.animation = 'none';
+                el.offsetHeight; // trigger reflow
+                el.style.animation = '';
+            });
+
+            // Remove active from all
+            document.querySelectorAll('.slide').forEach(function(s) {
+                s.classList.remove('active', 'exit-left');
+            });
+
+            // Exit current
+            if (goingForward) {
+                currentEl.classList.add('exit-left');
+            }
+
+            // Enter next
+            nextEl.classList.add('active');
+
+            currentSlide = n;
+            updateUI();
+
+            // Re-render Lucide icons for the new slide
+            setTimeout(function() {
+                lucide.createIcons();
+            }, 50);
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) goToSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) goToSlide(currentSlide - 1);
+        }
+
+        function updateUI() {
+            document.getElementById('currentSlide').textContent = currentSlide;
+            document.getElementById('progressBar').style.width = ((currentSlide / totalSlides) * 100) + '%';
+
+            // Update thumbnails
+            var btns = document.querySelectorAll('.thumb-btn');
+            for (var i = 0; i < btns.length; i++) {
+                var slideNum = parseInt(btns[i].dataset.slide);
+                if (slideNum === currentSlide) {
+                    btns[i].className = 'thumb-btn w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center text-xs font-bold bg-mint-500 text-white';
+                } else if (slideNum === currentSlide - 1 || slideNum === currentSlide + 1) {
+                    btns[i].className = 'thumb-btn w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center text-xs font-bold bg-mint-100 text-mint-700 hover:bg-mint-200';
+                } else {
+                    btns[i].className = 'thumb-btn w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center text-xs font-bold bg-gray-100 text-gray-400 hover:bg-gray-200';
+                }
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Touch/swipe support
+        var touchStartX = 0;
+        var touchStartY = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', function(e) {
+            var diffX = touchStartX - e.changedTouches[0].screenX;
+            var diffY = Math.abs(touchStartY - e.changedTouches[0].screenY);
+            // Only trigger swipe if horizontal movement is dominant
+            if (Math.abs(diffX) > 60 && Math.abs(diffX) > diffY * 2) {
+                if (diffX > 0) nextSlide();
+                else prevSlide();
+            }
+        }, { passive: true });
+
+        // Initial state
+        updateUI();
+    </script>
+</body>
+</html>
